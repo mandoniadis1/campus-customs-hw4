@@ -1,0 +1,32 @@
+# --- Secrets: never commit real keys ---
+.env
+.env.*
+!.env.example
+
+# --- Local-only data pack (database + product images are not in git) ---
+data/
+*.db
+*.db-journal
+*.sqlite
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# --- Node / Vite ---
+node_modules/
+frontend/dist/
+*.log
+
+# --- Runtime files ---
+output/audit_trail.lock
+output/*.tmp
+output/*.json.tmp
+
+# --- OS / editor / personal scratch ---
+.DS_Store
+.vscode/
+.idea/
+joke.txt

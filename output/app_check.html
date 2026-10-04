@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campus Customs: App Check (Problem 11)</title>
+  <style>
+    :root { --navy: #00356b; --ink: #13213a; --muted: #55657f; --line: #d5dde9; --ok: #157a46; --okbg: #e2f5ea; --bg: #f3f6fb; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Inter, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.55; font-size: 17px; }
+    header { background: var(--navy); color: #fff; padding: 2.4rem 1.5rem 2rem; }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    h1 { margin: 0 0 .5rem; font-family: Georgia, "Times New Roman", serif; font-size: 2.3rem; }
+    header p { margin: .25rem 0; color: #dbe6f6; max-width: 820px; }
+    header code { background: rgb(255 255 255 / 16%); color: #fff; }
+    main { padding: 1.8rem 1.5rem 3rem; }
+
+    /* Scorecard */
+    .scorecard { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 2.2rem; box-shadow: 0 4px 14px rgb(0 0 0 / 5%); }
+    .scorecard h2 { margin: 0; padding: 1rem 1.3rem; font-size: 1.25rem; border-bottom: 1px solid var(--line); }
+    .scorecard table { width: 100%; border-collapse: collapse; }
+    .scorecard td, .scorecard th { padding: .8rem 1.3rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .scorecard tr:last-child td { border-bottom: none; }
+    .scorecard th { background: #f6f8fc; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+    .scorecard a { color: var(--navy); font-weight: 700; text-decoration: none; }
+    .scorecard a:hover { text-decoration: underline; }
+
+    .pass { display: inline-block; padding: .2rem .75rem; border-radius: 999px; background: var(--okbg); color: var(--ok); font-weight: 800; font-size: .85rem; white-space: nowrap; }
+
+    /* Each check */
+    section.check { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 1.6rem 1.8rem 1.9rem; margin-bottom: 2.4rem; box-shadow: 0 4px 14px rgb(0 0 0 / 5%); }
+    section.check > h2 { font-family: Georgia, "Times New Roman", serif; color: var(--navy); font-size: 1.75rem; margin: 0 0 .5rem; }
+    h3 { font-size: 1.1rem; margin: 1.6rem 0 .6rem; }
+    .asked { background: #f6f8fc; border-left: 4px solid var(--navy); padding: .7rem 1rem; border-radius: 0 8px 8px 0; margin: .8rem 0; }
+    .asked b { color: var(--navy); }
+    .proves { background: var(--okbg); border: 1px solid #b9e3c9; padding: .85rem 1.1rem; border-radius: 10px; margin: 1.1rem 0 0; }
+    .proves b { color: var(--ok); }
+
+    .pair { display: grid; grid-template-columns: 1.15fr 1fr; gap: 1.2rem; align-items: start; }
+    .pair.even { grid-template-columns: 1fr 1fr; }
+    figure { margin: 0; }
+    figure a { display: block; }
+    figure img { width: 100%; display: block; border: 1px solid var(--line); border-radius: 10px; background: #0b1220; }
+    figure img.small { max-width: 300px; }
+    figcaption { margin-top: .45rem; font-size: .92rem; color: var(--muted); }
+    figcaption b { color: var(--ink); }
+    .label { display: inline-block; margin-bottom: .4rem; font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .full { margin-top: 1.3rem; }
+
+    table.db { border-collapse: collapse; width: 100%; font-size: .95rem; margin-top: .4rem; }
+    table.db th, table.db td { border: 1px solid var(--line); padding: .5rem .7rem; text-align: left; vertical-align: top; }
+    table.db th { background: #f6f8fc; }
+    td.ok { color: var(--ok); font-weight: 800; text-align: center; }
+    code { background: #eef2f8; padding: .05rem .35rem; border-radius: 4px; font-size: .88em; }
+    .hint { color: var(--muted); font-size: .88rem; }
+    footer { text-align: center; color: var(--muted); font-size: .9rem; }
+    @media (max-width: 820px) { .pair, .pair.even { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Campus Customs: Live Site App Check</h1>
+    <p><b>Problem 11.</b> Tested on October 4, 2026 on the running website (frontend <code>http://127.0.0.1:5174</code>, FastAPI on port 8000, live <code>campus_customs.db</code>).</p>
+    <p>How: a real Chrome browser (driven by Playwright) typed into the chat and clicked through the site like a shopper, as a guest, so nothing was saved. Every number in the screenshots was then checked against the database with SQL.</p>
+    <p class="hint" style="color:#b9cbe6">Tip: click any screenshot to open it full size.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="scorecard">
+    <h2>Scorecard</h2>
+    <table>
+      <tr><th>#</th><th>Check</th><th>Result</th><th>Proof in one line</th></tr>
+      <tr><td>1</td><td><a href="#check1">Chat checks an item's inventory</a></td><td><span class="pass">PASS</span></td><td>Bot said "2 left in XL, $68" and "out of stock in M". The database says XL = 2, price $68, M = 0.</td></tr>
+      <tr><td>2</td><td><a href="#check2">Category question → search-result cards on the page</a></td><td><span class="pass">PASS</span></td><td>"What quarter-zips do you have?" opened a page of 11 cards (database: 11 quarter-zips, all $72). Clicking a card opens its product page.</td></tr>
+      <tr><td>3</td><td><a href="#check3">Problem 9 feature: 🔥 Going Fast page</a></td><td><span class="pass">PASS</span></td><td>"Only 9 left!" and "4 sizes sold out" badges match the database exactly.</td></tr>
+      <tr><td>+</td><td><a href="#bonus">Bug found while testing: Long Sleeves filter</a></td><td><span class="pass">FIXED</span></td><td>The filter said 2 and sometimes showed 0 items. It now counts all 44 long-sleeve items, and its counts follow the search.</td></tr>
+    </table>
+  </div>
+
+  <!-- ===================== CHECK 1 ===================== -->
+  <section class="check" id="check1">
+    <h2>1. Chat checks the inventory level of an item</h2>
+    <span class="pass">PASS: stock and price are honest</span>
+
+    <h3>A. A size that is in stock (low)</h3>
+    <div class="asked"><b>Shopper (on the Basic Hoodie Big Yale page):</b> "How many of this hoodie are left in XL, and what's the price?"</div>
+    <div class="pair">
+      <figure>
+        <span class="label">The chat's answer</span>
+        <a href="app_check_images/1_inventory_chat.png" target="_blank"><img src="app_check_images/1_inventory_chat.png" alt="Chat answer: only 2 left in XL, price $68" /></a>
+        <figcaption><b>"There are only 2 left in XL, and the price is $68."</b> The bot also understood that "this hoodie" means the product on screen.</figcaption>
+      </figure>
+      <figure>
+        <span class="label">The site's own stock table for this product</span>
+        <a href="app_check_images/1_inventory_stock_table.png" target="_blank"><img class="small" src="app_check_images/1_inventory_stock_table.png" alt="Stock by size table: XL 2" /></a>
+        <figcaption>XL = <b>2</b>. This table reads straight from the inventory table in the database.</figcaption>
+      </figure>
+    </div>
+
+    <h3>B. A size that is out of stock</h3>
+    <div class="asked"><b>Shopper (on the Crew Left Chest Hoodie page):</b> "Do you have this one in a medium?"</div>
+    <div class="pair">
+      <figure>
+        <span class="label">The chat's answer</span>
+        <a href="app_check_images/1_out_of_stock_chat.png" target="_blank"><img src="app_check_images/1_out_of_stock_chat.png" alt="Chat answer: out of stock in M" /></a>
+        <figcaption><b>"Sorry, the Crew Left Chest Hoodie is out of stock in M. It's available in XS, S, L, XL and XXL."</b> The product card also marks "Out of stock: M" in red.</figcaption>
+      </figure>
+      <figure>
+        <span class="label">The site's own stock table for this product</span>
+        <a href="app_check_images/1_out_of_stock_table.png" target="_blank"><img class="small" src="app_check_images/1_out_of_stock_table.png" alt="Stock by size table: M sold out" /></a>
+        <figcaption>M = <b>Sold out</b> (0). Every other size has stock, which matches the sizes the bot offered.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Checked against the database</h3>
+    <table class="db">
+      <tr><th>Question</th><th>Bot said</th><th>Database</th><th>Match</th></tr>
+      <tr><td>Basic Hoodie Big Yale, XL</td><td>2 left · $68</td><td>XL quantity = 2 · price = 68.00</td><td class="ok">✓</td></tr>
+      <tr><td>Crew Left Chest Hoodie, M</td><td>Out of stock in M · offered XS, S, L, XL, XXL</td><td>M = 0 · XS 20, S 12, L 8, XL 20, XXL 5</td><td class="ok">✓</td></tr>
+    </table>
+
+    <div class="proves"><b>What this proves:</b> the chatbot reports real stock and prices from the database, including when a size is sold out, rather than guessing. It reads stock with read-only tools, and a code check blocks any price or quantity that didn't come from a tool.</div>
+
+    <figure class="full">
+      <span class="label">Full page for context</span>
+      <a href="app_check_images/1_inventory_full.png" target="_blank"><img src="app_check_images/1_inventory_full.png" alt="Full product page with chat open" /></a>
+      <figcaption>The whole Basic Hoodie Big Yale page with the chat open. The page shows $68.00 and the same stock table.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== CHECK 2 ===================== -->
+  <section class="check" id="check2">
+    <h2>2. Dynamic search-result cards after a category question</h2>
+    <span class="pass">PASS: cards appear, and each opens its product page</span>
+
+    <div class="asked"><b>Shopper (starting on the Home page):</b> "What quarter-zips do you have?"</div>
+    <div class="pair">
+      <figure>
+        <span class="label">Step 1: the chat answers</span>
+        <a href="app_check_images/2_search_chat.png" target="_blank"><img src="app_check_images/2_search_chat.png" alt="Chat: pulled up all 11 quarter-zips on the page" /></a>
+        <figcaption><b>"I've pulled up all 11 quarter-zips on the page. They're $72 each…"</b> The chat also shows its top picks and a "Showing 11 items on the page" link.</figcaption>
+      </figure>
+      <figure>
+        <span class="label">Step 2: the page updates by itself</span>
+        <a href="app_check_images/2_search_chat_and_page.png" target="_blank"><img src="app_check_images/2_search_chat_and_page.png" alt="Products page opened automatically with the chat results banner" /></a>
+        <figcaption>Without any click, the site moved from Home to the Products page, with the banner <b>"From your chat with the assistant: Quarter-Zips"</b> and <b>"11 products found by the assistant"</b>.</figcaption>
+      </figure>
+    </div>
+
+    <div class="pair even" style="margin-top:1.2rem">
+      <figure>
+        <span class="label">Step 3: the result cards (chat closed)</span>
+        <a href="app_check_images/2_search_cards.png" target="_blank"><img src="app_check_images/2_search_cards.png" alt="Grid of quarter-zip product cards" /></a>
+        <figcaption>Each card shows the <b>image, category, name, short description, price</b> and color swatches.</figcaption>
+      </figure>
+      <figure>
+        <span class="label">Step 4: clicking a card opens the detail page</span>
+        <a href="app_check_images/2_card_opens_detail.png" target="_blank"><img src="app_check_images/2_card_opens_detail.png" alt="Benjamin Franklin 1/4 Zip product detail page" /></a>
+        <figcaption>Clicking the first card opened <code>/products/benjamin-franklin-1-4-zip</code>, the full single-item page from Problem 3 (zoom image, price, sizes, stock).</figcaption>
+      </figure>
+    </div>
+
+    <h3>Checked against the database</h3>
+    <table class="db">
+      <tr><th>What</th><th>Site</th><th>Database</th><th>Match</th></tr>
+      <tr><td>How many quarter-zips</td><td>11 cards · bot said "all 11"</td><td>11 products with a quarter-zip type</td><td class="ok">✓</td></tr>
+      <tr><td>Price</td><td>"$72 each" · every card $72.00</td><td>All 11 are priced 72.00</td><td class="ok">✓</td></tr>
+      <tr><td>Card click</td><td>Opened the Benjamin Franklin 1 4 Zip page</td><td>product_id <code>benjamin-franklin-1-4-zip</code></td><td class="ok">✓</td></tr>
+    </table>
+    <p class="hint">Data note: one card is named "School Of Architecture <i>Crewneck</i>", but the database lists its type and description as a quarter-zip pullover. It belongs in these results; only the catalogue name is wrong.</p>
+
+    <div class="proves"><b>What this proves:</b> a category question in the chat pulls up the matching items on the website as normal product cards, and the cards still open the detailed product view.</div>
+  </section>
+
+  <!-- ===================== CHECK 3 ===================== -->
+  <section class="check" id="check3">
+    <h2>3. Problem 9 usability feature: 🔥 Going Fast page</h2>
+    <span class="pass">PASS: urgency badges use real stock numbers</span>
+
+    <div class="asked"><b>Shopper:</b> clicks <b>🔥 Going Fast</b> in the navigation bar.</div>
+    <figure>
+      <span class="label">Close-up: the top 3 "trending" items</span>
+      <a href="app_check_images/3_going_fast_cards.png" target="_blank"><img src="app_check_images/3_going_fast_cards.png" alt="Top three Going Fast cards with badges" /></a>
+      <figcaption>Badges like <b>"Only 9 left!"</b> and <b>"4 sizes sold out"</b>, a stock meter, and exact facts on each card: units left, sizes almost gone, sizes sold out, sizes still available.</figcaption>
+    </figure>
+
+    <h3>Checked against the database</h3>
+    <table class="db">
+      <tr><th>Rank</th><th>Item</th><th>Page shows</th><th>Database (units left · sold-out sizes)</th><th>Match</th></tr>
+      <tr><td>#1</td><td>Football Left Chest T Shirt</td><td>Only 9 left · sold out XS, M, XL</td><td>9 · XS, M, XL</td><td class="ok">✓</td></tr>
+      <tr><td>#2</td><td>Tri Blend Sports Hockey T Shirt</td><td>13 left · 4 sizes sold out (XS, M, L, XXL)</td><td>13 · XS, M, L, XXL</td><td class="ok">✓</td></tr>
+      <tr><td>#3</td><td>T Felt Y Heavyweight</td><td>14 left · 4 sizes sold out (XS, L, XL, XXL)</td><td>14 · XS, L, XL, XXL</td><td class="ok">✓</td></tr>
+    </table>
+
+    <div class="proves"><b>What this proves:</b> the Going Fast page shows the items closest to selling out, and every urgency message ("Only 9 left!", "4 sizes sold out") is true, so shoppers can trust it and grab their size.</div>
+
+    <figure class="full">
+      <span class="label">Full page for context</span>
+      <a href="app_check_images/3_going_fast_page.png" target="_blank"><img src="app_check_images/3_going_fast_page.png" alt="Going Fast page header and first row" /></a>
+      <figcaption>The page header ("Going fast! Lock it in.") and the first row of trending items.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ===================== BONUS ===================== -->
+  <section class="check" id="bonus">
+    <h2>Bonus: bug found during testing, then fixed</h2>
+    <span class="pass">FIXED</span>
+    <div class="pair">
+      <figure>
+        <span class="label">After the fix: Product Type menu after searching "hoodie"</span>
+        <a href="app_check_images/4_filter_fix.png" target="_blank"><img src="app_check_images/4_filter_fix.png" alt="Product Type menu with counts that follow the search" /></a>
+      </figure>
+      <div>
+        <p><b>Before:</b> "Long Sleeves (2)", even though 44 products are long-sleeved. After a search, clicking it showed <b>nothing</b>, because the search word stayed active invisibly while the counts ignored it.</p>
+        <p><b>After:</b></p>
+        <ul>
+          <li>Long Sleeves includes every long-sleeve item (<b>44</b>).</li>
+          <li>Counts follow the current search and filters. With "hoodie" searched: Hoodies 27, Long Sleeves 7, and the rest 0 and greyed out.</li>
+          <li>The search shows as a removable <b>Search: "hoodie" ✕</b> pill.</li>
+        </ul>
+        <p>Clicking Long Sleeves now gives exactly the number the menu promised.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>Browser console during all test runs: 0 JavaScript errors · Screenshots: <code>app_check_images/</code></footer>
+</main>
+</body>
+</html>
