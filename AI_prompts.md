@@ -173,3 +173,9 @@ All prompts are verbatim, in the order they were typed, grouped by problem.
 > Follow the layout and other instructions attached
 >
 > [Image attached: expected file layout — hw4/ with AI_prompts.md, requirements.txt, .env.example, .gitignore, README.md, frontend/ (Vite React TypeScript app), backend/ (main.py, agent.py, models.py, tools.py, prompts/prompt.md), output/ (harness.md, design.md, usability.md, app_check.html, app_check_images/, audit_trail.json); local-only data pack data/ (campus_customs.db, products/) not in git; README.md explains how to run front end and back end after placing the data pack]
+
+> How do I include this as something to open in github?
+>
+> file:///Users/madison/.codex/my_app/hw4/output/app_check.html
+>
+> They won't be able to open a madison file right?

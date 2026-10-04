@@ -8,16 +8,18 @@ A full-stack storefront for **Campus Customs**, a Yale spirit-wear shop, with a 
 
 ## Where to look (for grading)
 
+**▶ Live app check report (opens as a webpage): https://mandoniadis1.github.io/campus-customs-hw4/output/app_check.html**
+
 | What | File |
 |---|---|
 | How the whole system works (architecture, model fields, tools, safety, specs) | [`output/harness.md`](output/harness.md) (start with the **Problem 12** section) |
-| Live site test with screenshots | [`output/app_check.html`](output/app_check.html) (screenshots in [`output/app_check_images/`](output/app_check_images/)) |
+| Live site test with screenshots | **[Open the report as a webpage](https://mandoniadis1.github.io/campus-customs-hw4/output/app_check.html)** (source: [`output/app_check.html`](output/app_check.html), screenshots: [`output/app_check_images/`](output/app_check_images/)) |
 | Usability improvements (filters, Going Fast, theme, bulldog, async, privacy) | [`output/usability.md`](output/usability.md) |
 | Design changes (fonts, color, hierarchy, motion, product cards, chat) | [`output/design.md`](output/design.md) |
 | Append-only agent audit trail | [`output/audit_trail.json`](output/audit_trail.json) |
 | Every prompt used to build it, by problem | [`AI_prompts.md`](AI_prompts.md) |
 
-> GitHub shows `app_check.html` as source code. To view it as a webpage, clone the repo and open the file in a browser. The screenshots are also viewable directly in `output/app_check_images/`.
+> GitHub's file view shows `app_check.html` as code, so use the **GitHub Pages link above** to see it as a webpage (hosted by GitHub Pages from this repo's `main` branch).
 
 ## The agent (4 files in `backend/`)
 
